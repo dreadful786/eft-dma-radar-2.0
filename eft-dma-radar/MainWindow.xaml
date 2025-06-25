@@ -7,7 +7,7 @@
         xmlns:skia="clr-namespace:SkiaSharp.Views.WPF;assembly=SkiaSharp.Views.WPF"
         xmlns:local="clr-namespace:eft_dma_radar.UI.Pages"
            mc:Ignorable="d"
-        Title="EFT DMA Radar"
+        Title="EFT DMA Radar - Dreadful - v2.1.0"
         ShowTitle="False"
         WindowStartupLocation="CenterScreen"
         Height="720" 
@@ -22,7 +22,7 @@
             </Grid.ColumnDefinitions>
 
             <Image Source="{StaticResource AppIconImage}" Width="24" Height="24" Margin="10,0,0,0"/>
-            <TextBlock Grid.Column="1" Text="EFT DMA Radar" VerticalAlignment="Center" Margin="10,0,0,0"/>
+            <TextBlock Grid.Column="1" Text="EFT DMA Radar - Dreadful - v2.1.0" VerticalAlignment="Center" Margin="10,0,0,0"/>
         </Grid>
     </hc:Window.NonClientAreaContent>
 
@@ -31,7 +31,7 @@
             <skia:SKGLElement x:Name="skCanvas"/>
         </Grid>
 
-        <Canvas Name="ToolbarCanvas" Panel.ZIndex="1500">
+        <Canvas Name="ToolbarCanvas" Panel.ZIndex="1500" Visibility="Collapsed">
             <Border x:Name="customToolbar"
             Background="{DynamicResource RegionBrush}"
             BorderBrush="{DynamicResource BorderBrush}"

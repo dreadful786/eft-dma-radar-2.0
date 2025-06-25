@@ -54,6 +54,14 @@ namespace eft_dma_radar
     public partial class MainWindow
     {
         #region Fields / Properties
+        private FloatingESPControl _floatingESPControl;
+        private FloatingGeneralSettingsControl _floatingGeneralSettingsControl;
+        private FloatingLootControl _floatingLootControl;
+        private FloatingLootFilterControl _floatingLootFilterControl;
+        private FloatingMemoryWritingControl _floatingMemoryWritingControl;
+        private FloatingWatchlistControl _floatingWatchlistControl;
+        private FloatingPlayerHistoryControl _floatingPlayerHistoryControl;
+        private FloatingToolbar _floatingToolbar;
         private DispatcherTimer _sizeChangeTimer;
         private readonly Stopwatch _fpsSw = new();
         private readonly PrecisionTimer _renderTimer;
@@ -307,9 +315,25 @@ namespace eft_dma_radar
             Initialized = true;
             InitializePanels();
             InitializeUIActivityMonitoring();
+            this.Loaded += MainWindow_Loaded;
+            this.Closing += MainWindow_Closing;
         }
 
-        private void btnDebug_Click(object sender, RoutedEventArgs e)
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            // Create and show the floating toolbar
+            _floatingToolbar = new FloatingToolbar(this);
+            _floatingToolbar.Show();
+            _floatingESPControl = new FloatingESPControl(this);
+            _floatingGeneralSettingsControl = new FloatingGeneralSettingsControl(this);
+            _floatingLootControl = new FloatingLootControl(this);
+            _floatingLootFilterControl = new FloatingLootFilterControl(this);
+            _floatingMemoryWritingControl = new FloatingMemoryWritingControl(this);
+            _floatingWatchlistControl = new FloatingWatchlistControl(this);
+            _floatingPlayerHistoryControl = new FloatingPlayerHistoryControl(this);
+        }
+
+        public void btnDebug_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -1094,15 +1118,38 @@ namespace eft_dma_radar
         }
         #endregion
 
+        #region Floating Toolbar Control Methods
+
+        // Add these methods to control the floating toolbar
+        public void ShowFloatingToolbar()
+        {
+            _floatingToolbar?.ShowToolbar();
+        }
+
+        public void HideFloatingToolbar()
+        {
+            _floatingToolbar?.Hide();
+        }
+
+        public void ToggleFloatingToolbar()
+        {
+            _floatingToolbar?.ToggleVisibility();
+        }
+
+        #endregion
+
         #region Panel Events
         #region General Settings
         /// <summary>
         /// Handles opening general settings panel
         /// </summary>
-        private void btnGeneralSettings_Click(object sender, RoutedEventArgs e)
+        public void btnGeneralSettings_Click(object sender, RoutedEventArgs e)
         {
-            NotifyUIActivity();
-            TogglePanelVisibility("GeneralSettings");
+            // Hide the original ESP panel and show the floating one
+            if (GeneralSettingsPanel != null)
+                GeneralSettingsPanel.Visibility = Visibility.Collapsed;
+
+            ToggleFloatingGeneralSettingsControl();
         }
 
         /// <summary>
@@ -1149,11 +1196,13 @@ namespace eft_dma_radar
         /// <summary>
         /// Handles setting loot settings panel visibility
         /// </summary>
-        private void btnLootSettings_Click(object sender, RoutedEventArgs e)
+        public void btnLootSettings_Click(object sender, RoutedEventArgs e)
         {
-            NotifyUIActivity();
-            TogglePanelVisibility("LootSettings");
+            // Hide the original ESP panel and show the floating one
+            if (LootSettingsPanel != null)
+                LootSettingsPanel.Visibility = Visibility.Collapsed;
 
+            ToggleFloatingLootControl();
         }
 
         /// <summary>
@@ -1200,10 +1249,13 @@ namespace eft_dma_radar
         /// <summary>
         /// Handles setting memory writing panel visibility
         /// </summary>
-        private void btnMemoryWritingSettings_Click(object sender, RoutedEventArgs e)
+        public void btnMemoryWritingSettings_Click(object sender, RoutedEventArgs e)
         {
-            NotifyUIActivity();
-            TogglePanelVisibility("MemoryWriting");
+            // Hide the original ESP panel and show the floating one
+            if (MemoryWritingPanel != null)
+                MemoryWritingPanel.Visibility = Visibility.Collapsed;
+
+            ToggleFloatingMemoryWritingControl();
         }
 
         /// <summary>
@@ -1250,10 +1302,13 @@ namespace eft_dma_radar
         /// <summary>
         /// Handles setting ESP panel visibility
         /// </summary>
-        private void btnESPSettings_Click(object sender, RoutedEventArgs e)
+        public void btnESPSettings_Click(object sender, RoutedEventArgs e)
         {
-            NotifyUIActivity();
-            TogglePanelVisibility("ESP");
+            // Hide the original ESP panel and show the floating one
+            if (ESPPanel != null)
+                ESPPanel.Visibility = Visibility.Collapsed;
+
+            ToggleFloatingESPControl();
         }
 
         /// <summary>
@@ -1300,10 +1355,13 @@ namespace eft_dma_radar
         /// <summary>
         /// Handles setting Watchlist panel visibility
         /// </summary>
-        private void btnWatchlist_Click(object sender, RoutedEventArgs e)
+        public void btnWatchlist_Click(object sender, RoutedEventArgs e)
         {
-            NotifyUIActivity();
-            TogglePanelVisibility("Watchlist");
+            // Hide the original ESP panel and show the floating one
+            if (WatchlistPanel != null)
+                WatchlistPanel.Visibility = Visibility.Collapsed;
+
+            ToggleFloatingWatchlistControl();
         }
 
         /// <summary>
@@ -1350,10 +1408,13 @@ namespace eft_dma_radar
         /// <summary>
         /// Handles setting Player History panel visibility
         /// </summary>
-        private void btnPlayerHistory_Click(object sender, RoutedEventArgs e)
+        public void btnPlayerHistory_Click(object sender, RoutedEventArgs e)
         {
-            NotifyUIActivity();
-            TogglePanelVisibility("PlayerHistory");
+            // Hide the original ESP panel and show the floating one
+            if (PlayerHistoryPanel != null)
+                PlayerHistoryPanel.Visibility = Visibility.Collapsed;
+
+            ToggleFloatingPlayerHistoryControl();
         }
 
         /// <summary>
@@ -1400,11 +1461,14 @@ namespace eft_dma_radar
         /// <summary>
         /// Handles setting loot filter panel visibility
         /// </summary>
-        private void btnLootFilter_Click(object sender, RoutedEventArgs e)
-        {
-            NotifyUIActivity();
-            TogglePanelVisibility("LootFilter");
+        public void btnLootFilter_Click(object sender, RoutedEventArgs e)
+        {           
+            // Hide the original ESP panel and show the floating one
+            if (LootFilterPanel != null)
+                LootFilterPanel.Visibility = Visibility.Collapsed;
 
+            ToggleFloatingLootFilterControl();
+            
             if (!LootFilterControl.firstRemove)
                 LootFilterControl.RemoveNonStaticGroups();
         }
@@ -1510,7 +1574,7 @@ namespace eft_dma_radar
         #endregion
 
         #region Player Preview Panel
-        private void btnPlayerPreview_Click(object sender, RoutedEventArgs e)
+        public void btnPlayerPreview_Click(object sender, RoutedEventArgs e)
         {
             NotifyUIActivity();
             TogglePanelVisibility("PlayerPreview");
@@ -1548,6 +1612,125 @@ namespace eft_dma_radar
 
         #endregion
 
+        #region Floating ESP Settings
+        public void ShowFloatingESPControl()
+        {
+            _floatingESPControl?.ShowESPControl();
+        }
+
+        public void HideFloatingESPControl()
+        {
+            _floatingESPControl?.Hide();
+        }
+
+        public void ToggleFloatingESPControl()
+        {
+            _floatingESPControl?.ToggleVisibility();
+        }
+
+        #endregion
+
+        #region Floating General Settings
+        public void ShowFloatingGeneralSettingsControl()
+        {
+            _floatingGeneralSettingsControl?.ShowGeneralSettingsControl();
+        }
+
+        public void HideFloatingGeneralSettingsControl()
+        {
+            _floatingGeneralSettingsControl?.Hide();
+        }
+
+        public void ToggleFloatingGeneralSettingsControl()
+        {
+            _floatingGeneralSettingsControl?.ToggleVisibility();
+        }
+
+        #endregion
+
+        #region Floating Loot Settings
+        public void ShowFloatingLootControl()
+        {
+            _floatingLootControl?.ShowLootControl();
+        }
+
+        public void HideFloatingLootControl()
+        {
+            _floatingLootControl?.Hide();
+        }
+
+        public void ToggleFloatingLootControl()
+        {
+            _floatingLootControl?.ToggleVisibility();
+        }
+        #endregion
+
+        #region Floating Loot Filter Settings
+        public void ShowFloatingLootFilterControl()
+        {
+            _floatingLootFilterControl?.ShowLootFilterControl();
+        }
+
+        public void HideFloatingLootFilterControl()
+        {
+            _floatingLootFilterControl?.Hide();
+        }
+
+        public void ToggleFloatingLootFilterControl()
+        {
+            _floatingLootFilterControl?.ToggleVisibility();
+        }
+        #endregion
+
+        #region Floating Memory Writing Settings
+        public void ShowFloatingMemoryWritingControl()
+        {
+            _floatingMemoryWritingControl?.ShowMemoryWritingControl();
+        }
+
+        public void HideFloatingMemoryWritingControl()
+        {
+            _floatingMemoryWritingControl?.Hide();
+        }
+
+        public void ToggleFloatingMemoryWritingControl()
+        {
+            _floatingMemoryWritingControl?.ToggleVisibility();
+        }
+        #endregion
+
+        #region Floating Watchlist Settings
+        public void ShowFloatingWatchlistControl()
+        {
+            _floatingWatchlistControl?.ShowWatchlistControl();
+        }
+
+        public void HideFloatingWatchlistControl()
+        {
+            _floatingWatchlistControl?.Hide();
+        }
+
+        public void ToggleFloatingWatchlistControl()
+        {
+            _floatingWatchlistControl?.ToggleVisibility();
+        }
+        #endregion
+
+        #region Floating Player History Settings
+        public void ShowFloatingPlayerHistoryControl()
+        {
+            _floatingPlayerHistoryControl?.ShowPlayerHistoryControl();
+        }
+
+        public void HideFloatingPlayerHistoryControl()
+        {
+            _floatingPlayerHistoryControl?.Hide();
+        }
+
+        public void ToggleFloatingPlayerHistoryControl()
+        {
+            _floatingPlayerHistoryControl?.ToggleVisibility();
+        }
         #endregion
 
         #region Toolbar Events
@@ -1585,7 +1768,7 @@ namespace eft_dma_radar
             }
         }
 
-        private void CustomToolbar_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        public void CustomToolbar_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             if (_isDraggingToolbar)
             {
@@ -1596,12 +1779,12 @@ namespace eft_dma_radar
             }
         }
 
-        private void btnRestart_Click(object sender, RoutedEventArgs e)
+        public void btnRestart_Click(object sender, RoutedEventArgs e)
         {
             Memory.RestartRadar = true;
         }
 
-        private void btnFreeMode_Click(object sender, RoutedEventArgs e)
+        public void btnFreeMode_Click(object sender, RoutedEventArgs e)
         {
             _freeMode = !_freeMode;
             if (_freeMode)
@@ -1643,6 +1826,7 @@ namespace eft_dma_radar
             skCanvas.InvalidateVisual();
         }
         #endregion
+        #endregion
 
         #region Window Events
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -1682,6 +1866,54 @@ namespace eft_dma_radar
                     {
                         ESPForm.Window.Close();
                     }
+                }
+
+                if (_floatingToolbar != null)
+                {
+                    _floatingToolbar.SaveFloatingToolbarPosition();
+                    _floatingToolbar.ForceClose();
+                }
+
+                if (_floatingESPControl != null)
+                {
+                    _floatingESPControl.SaveFloatingESPControlPosition();
+                    _floatingESPControl.ForceClose();
+                }
+
+                if (_floatingGeneralSettingsControl != null)
+                {
+                    _floatingGeneralSettingsControl.SaveFloatingGeneralSettingsControlPosition();
+                    _floatingGeneralSettingsControl.ForceClose();
+                }
+
+                if (_floatingLootControl != null)
+                {
+                    _floatingLootControl.SaveFloatingLootControlPosition();
+                    _floatingLootControl.ForceClose();
+                }
+
+                if (_floatingLootFilterControl != null)
+                {
+                    _floatingLootFilterControl.SaveFloatingLootFilterControlPosition();
+                    _floatingLootFilterControl.ForceClose();
+                }
+
+                if (_floatingMemoryWritingControl != null)
+                {
+                    _floatingMemoryWritingControl.SaveFloatingMemoryWritingControlPosition();
+                    _floatingMemoryWritingControl.ForceClose();
+                }
+
+                if (_floatingWatchlistControl != null)
+                {
+                    _floatingWatchlistControl.SaveFloatingWatchlistControlPosition();
+                    _floatingWatchlistControl.ForceClose();
+                }
+
+                if (_floatingPlayerHistoryControl != null)
+                {
+                    _floatingPlayerHistoryControl.SaveFloatingPlayerHistoryControlPosition();
+                    _floatingPlayerHistoryControl.ForceClose();
                 }
 
                 _renderTimer.Dispose();
